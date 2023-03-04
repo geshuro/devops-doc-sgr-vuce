@@ -1,23 +1,44 @@
 ###################################################
 ### RHEL 8
-###################################################
-Verificar subcripcion activa
-subcription list
+####################################################
+# Verificar subcripcion activa
+sudo subscription-manager list
 ###################################################
 ### Instalar OpenJDK 8
 ###################################################
 sudo dnf install java-11-openjdk-devel
-cd /opt
+# Si existe una version de Java instalada, debe elegir la 11
+<<COMMENT
+sudo update-alternatives --config 'java'
+[admin@atcertext-spark_01 ~]$ sudo update-alternatives --config 'java'
+[sudo] password for admin: 
+
+There are 2 programs which provide 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*+ 1           java-1.8.0-openjdk.x86_64 (/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-3.el8.x86_64/jre/bin/java)
+   2           java-11-openjdk.x86_64 (/usr/lib/jvm/java-11-openjdk-11.0.18.0.10-2.el8_7.x86_64/bin/java)
+
+Enter to keep the current selection[+], or type selection number: 2
+[admin@atcertext-spark_01 ~]$ java -version
+openjdk version "11.0.18" 2023-01-17 LTS
+OpenJDK Runtime Environment (Red_Hat-11.0.18.0.10-2.el8_7) (build 11.0.18+10-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-11.0.18.0.10-2.el8_7) (build 11.0.18+10-LTS, mixed mode, sharing)
+COMMENT
 ###################################################
 ### Instalar Apache Spark StandAlone
 ###################################################
 # Descarga de Apache Spark
-sudo wget https://dlcdn.apache.org/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
+cd /opt
+#sudo wget https://dlcdn.apache.org/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
+# En el 2023 ha sido archivada el instalador, se ubica en:
+sudo wget https://archive.apache.org/dist/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
 # Descomprir en carpeta /opt
 sudo tar -xvf spark-3.3.0-bin-hadoop3.tgz
 sudo ln -s /opt/spark-3.3.0-bin-hadoop3 /opt/spark
 # Crear usuario Spark
-useradd spark
+sudo useradd spark
 # Otorgar permisos Spark a carpeta Spark
 sudo chown -R spark:spark /opt/spark*
 # Crear servicio Master
@@ -62,6 +83,7 @@ sudo systemctl status spark-master.service
 # Abrir puerto para Master
 sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent
 sudo firewall-cmd --reload
+
 # Iniciar servicio Slave
 sudo systemctl start spark-slave.service
 
