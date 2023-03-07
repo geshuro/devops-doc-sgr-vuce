@@ -135,7 +135,7 @@ line3 word1 word2 word3 word4
 
 # Archivo
 /opt/spark/examples/src/main/python/wordcount.py
-
+<<COMMENT
 import sys
 from operator import add
 
@@ -161,6 +161,7 @@ if __name__ == "__main__":
         print("%s: %i" % (word, count))
 
     spark.stop()
+COMMENT
 # Ejecucion
 /opt/spark/bin/spark-submit /opt/spark/examples/src/main/python/wordcount.py /opt/spark/test.file
 
@@ -173,3 +174,33 @@ https://github.com/yahoo/TensorFlowOnSpark/wiki/GetStarted_Standalone
 https://github.com/yahoo/TensorFlowOnSpark
 https://anaconda.org/conda-forge/tensorflowonspark
 https://medium.com/@ssatyajitmaitra/you-can-blend-apache-spark-and-tensorflow-to-build-potential-deep-learning-solutions-9298e9fe8f6c
+
+
+
+
+# Modificar el hostname, eliminar guion abajo _
+hostnamectl status
+sudo hostnamectl --static set-hostname atcertext-spark-01
+sudo hostnamectl --static set-hostname atcertext-spark-02
+
+sudo vi /etc/hosts
+<<COMMENT
+    127.0.0.1   atcertextspark01
+    127.0.0.1   atcertextspark02
+OMMENT
+reboot 
+
+# Imprimir version lib python
+<<COMMENT
+>>> import tensorflow as tf
+2023-03-06 23:43:08.331851: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+
+>>> 
+>>> import tensorflowonspark as tfos
+>>> from tensorflowonspark import TFCluster
+>>> tf.__version__
+'2.10.0'
+>>> tfos.__version__
+'2.2.5'
+COMMENT
