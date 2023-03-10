@@ -2,10 +2,10 @@
 ### RHEL 8
 ####################################################
 
-sshpass -p 'Pk$w01rt' ssh -o StrictHostKeyChecking=no admin@192.168.100.48
-sshpass -p 'Pk$w02rt' ssh -o StrictHostKeyChecking=no admin@192.168.100.45
-sshpass -p 'Pk$w03rt' ssh -o StrictHostKeyChecking=no admin@192.168.100.51
-sshpass -p 'Pk$w04rt' ssh -o StrictHostKeyChecking=no admin@192.168.100.52
+ssh admin@192.168.100.48
+ssh admin@192.168.100.45
+ssh admin@192.168.100.51
+ssh admin@192.168.100.52
 # Verificar subcripcion activa
 sudo subscription-manager list
 ###################################################
