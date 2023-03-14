@@ -11,7 +11,7 @@ sudo subscription-manager list
 ###################################################
 ### Instalar OpenJDK 8
 ###################################################
-sudo dnf install java-11-openjdk-devel
+sudo dnf install java-11-openjdk-devel -y
 # Si existe una version de Java instalada, debe elegir la 11
 <<COMMENT
 sudo update-alternatives --config 'java'
@@ -48,7 +48,7 @@ sudo useradd spark
 sudo chown -R spark:spark /opt/spark*
 # Crear servicio Master
 sudo vi /etc/systemd/system/spark-master.service
-## Archivo Master service - 192.168.130.145 atcertext-spark_01
+## Archivo Master service - atprodext-spark-01 192.168.100.48
 [Unit]
 Description=Apache Spark Master
 After=network.target
@@ -63,7 +63,7 @@ ExecStop=/opt/spark/sbin/stop-master.sh
 [Install]
 WantedBy=multi-user.target
 
-# Crear servicio Slave - 192.168.130.146 atcertext-spark_02
+# Crear servicio Slave - atprodext-spark-01, atprodext-spark-02,atprodext-spark-03 y atprodext-spark-04
 sudo vi /etc/systemd/system/spark-slave.service
 ## Archivo Slave service
 [Unit]
@@ -74,7 +74,7 @@ After=network.target
 Type=forking
 User=spark
 Group=spark
-ExecStart=/opt/spark/sbin/start-slave.sh spark://192.168.130.145:7077
+ExecStart=/opt/spark/sbin/start-slave.sh spark://192.168.100.48:7077
 ExecStop=/opt/spark/sbin/stop-slave.sh
 
 [Install]
@@ -97,7 +97,7 @@ sudo systemctl status spark-slave.service
 ### Installar Conda
 ###################################################
 sudo wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
-sudo bash Miniconda3-py39_4.12.0-Linux-x86_64.sh
+sudo bash /opt/Miniconda3-py39_4.12.0-Linux-x86_64.sh
 # elegir carpeta 
 /home/admin/miniconda3
 ###################################################
@@ -133,7 +133,7 @@ conda install -c conda-forge tensorflowonspark -n vuce.sgr.01 -y
 ### Prueba de funcionamiento
 ###################################################
 # Archivo
-/opt/spark/test.file
+sudo vi /opt/spark/test.file
  line1 word1 word2 word3
 line2 word1
 line3 word1 word2 word3 word4
@@ -182,18 +182,21 @@ https://medium.com/@ssatyajitmaitra/you-can-blend-apache-spark-and-tensorflow-to
 
 
 
-
+# Nota
+# Si el hostname tiene guion abajo _, configurar
 # Modificar el hostname, eliminar guion abajo _
 hostnamectl status
-sudo hostnamectl --static set-hostname atcertext-spark-01
-sudo hostnamectl --static set-hostname atcertext-spark-02
+sudo hostnamectl --static set-hostname atprodext-spark-01
+sudo hostnamectl --static set-hostname atprodext-spark-02
+sudo hostnamectl --static set-hostname atprodext-spark-03
+sudo hostnamectl --static set-hostname atprodext-spark-04
 
+#en cada servidor con su hostname
 sudo vi /etc/hosts
 <<COMMENT
-    127.0.0.1   atcertextspark01
-    127.0.0.1   atcertextspark02
-OMMENT
-reboot 
+    127.0.0.1   atprodext-spark-01
+COMMENT
+sudo reboot 
 
 # Imprimir version lib python
 <<COMMENT
